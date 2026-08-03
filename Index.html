@@ -1,0 +1,876 @@
+<title>Homepage Revamp 2026 — How Every Section Works</title>
+<style>
+  :root{
+    --violet:#8B6BF7; --violet-2:#7B5CF5; --violet-lt:#B49CFB;
+    --bg:#0B0B0D; --bg-panel:#111116; --bg-sunk:#18181F; --bg-row:#141419;
+    --fg:#F2F2F4; --fg-mute:#8E8EA0; --fg-faint:#50505C;
+    --line:rgba(255,255,255,.055); --line-strong:rgba(255,255,255,.1);
+    --accent:var(--violet); --accent-fg:#FFFFFF; --mark:var(--violet-lt);
+    --dot:rgba(139,107,247,.10); --field-bg:#0B0B0D;
+    --tape:var(--violet); --tape-fg:#FFFFFF;
+    --f-display:"Haettenschweiler","Arial Narrow Bold",Impact,"Franklin Gothic Heavy",sans-serif;
+    --f-mono:ui-monospace,"SFMono-Regular","Cascadia Mono","Consolas","Liberation Mono",monospace;
+    --f-body:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --w:1180px; --r:9px;
+  }
+  /* Committed to the dark-purple ground in every viewer theme. */
+  @media (prefers-color-scheme:light){
+    :root{
+      --bg:#0B0B0D; --bg-panel:#111116; --bg-sunk:#18181F; --bg-row:#141419;
+      --fg:#F2F2F4; --fg-mute:#8E8EA0; --fg-faint:#50505C;
+      --line:rgba(255,255,255,.055); --line-strong:rgba(255,255,255,.1);
+      --accent:var(--violet); --accent-fg:#FFFFFF; --mark:var(--violet-lt);
+      --dot:rgba(139,107,247,.10); --field-bg:#0B0B0D; --tape:var(--violet); --tape-fg:#FFFFFF;
+    }
+  }
+  :root[data-theme="dark"],:root[data-theme="light"]{
+    --bg:#0B0B0D; --bg-panel:#111116; --bg-sunk:#18181F; --bg-row:#141419;
+    --fg:#F2F2F4; --fg-mute:#8E8EA0; --fg-faint:#50505C;
+    --line:rgba(255,255,255,.055); --line-strong:rgba(255,255,255,.1);
+    --accent:var(--violet); --accent-fg:#FFFFFF; --mark:var(--violet-lt);
+    --dot:rgba(139,107,247,.10); --field-bg:#0B0B0D; --tape:var(--violet); --tape-fg:#FFFFFF;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);
+    background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:24px 24px;
+    color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:var(--f-mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+  .disp{font-family:var(--f-display);font-weight:400;letter-spacing:.005em;text-transform:uppercase;line-height:.92;text-wrap:balance}
+
+  .bar{position:sticky;top:0;z-index:40;background:rgba(11,11,13,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar-in{max-width:var(--w);margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .bar-id{display:flex;flex-direction:column;gap:1px;margin-right:auto}
+  .bar-id b{font-family:var(--f-display);font-size:19px;letter-spacing:.01em;text-transform:uppercase;font-weight:400}
+  .bar-id span{color:var(--fg-faint)}
+  .meter{display:flex;align-items:center;gap:9px}
+  .meter-track{width:140px;height:6px;background:var(--bg-sunk);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .meter-fill{height:100%;width:0;background:linear-gradient(90deg,var(--violet-2),var(--violet-lt));transition:width .25s ease}
+  .meter b{font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums;min-width:3.6em;text-align:right}
+
+  button{font:inherit;color:inherit;cursor:pointer}
+  .btn{font-family:var(--f-mono);text-transform:uppercase;letter-spacing:.12em;font-size:11px;background:transparent;border:1px solid var(--line-strong);color:var(--fg);padding:8px 12px;border-radius:var(--r)}
+  .btn:hover{border-color:var(--accent);color:var(--mark)}
+  .btn.solid{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+  .btn.solid:hover{filter:brightness(1.1);color:var(--accent-fg)}
+  .btn:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+  .saved{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-faint)}
+
+  .shell{max-width:var(--w);margin:0 auto;padding:0 20px 80px;display:grid;grid-template-columns:1fr;gap:32px}
+  @media (min-width:1040px){.shell{grid-template-columns:206px minmax(0,1fr);gap:42px;align-items:start}}
+
+  .mast{grid-column:1/-1;padding:46px 0 24px;border-bottom:1px solid var(--line-strong)}
+  .mast .eyebrow{color:var(--mark)}
+  .mast h1{margin:10px 0 0;font-size:clamp(36px,7vw,72px)}
+  .mast h1 em{font-style:normal;color:var(--mark)}
+  .mast .lede{max-width:66ch;margin:16px 0 0;color:var(--fg-mute)}
+  .mast .lede b{color:var(--fg);font-weight:600}
+  .files{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .file{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line-strong);border-radius:var(--r);padding:6px 10px;color:var(--fg-mute);text-decoration:none}
+  .file:hover{border-color:var(--accent);color:var(--mark)}
+  .file b{color:var(--fg)}
+
+  .rail{position:sticky;top:74px;display:none}
+  @media (min-width:1040px){.rail{display:block}}
+  .rail h2{margin:0 0 10px;color:var(--fg-faint)}
+  .rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px;max-height:calc(100vh - 130px);overflow:auto}
+  .rail a{display:grid;grid-template-columns:14px 1fr;gap:8px;align-items:baseline;text-decoration:none;color:var(--fg-mute);padding:4px 6px 4px 8px;font-size:12.5px;line-height:1.3;border-left:2px solid transparent}
+  .rail a:hover{color:var(--fg);border-left-color:var(--line-strong)}
+  .rail a.on{color:var(--fg);border-left-color:var(--accent)}
+  .rail .tick{font-family:var(--f-mono);font-size:9px;color:var(--fg-faint)}
+  .rail a.done .tick{color:var(--mark)}
+  .rail .grp{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-faint);padding:15px 0 5px 8px}
+
+  .who{border:1px solid var(--line);border-radius:var(--r);background:var(--bg-panel);padding:16px;margin:0 0 16px}
+  .who-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media (min-width:700px){.who-grid{grid-template-columns:1.1fr 1.5fr .8fr}}
+  .who-note{margin:13px 0 0;padding-top:12px;border-top:1px dashed var(--line-strong);color:var(--fg-faint);font-size:12.5px;line-height:1.5;max-width:84ch}
+  .who-note b{color:var(--fg-mute);font-weight:600}
+
+  .panel{border:1px solid var(--line);border-radius:var(--r);background:var(--bg-panel);margin-bottom:12px;scroll-margin-top:82px;overflow:hidden}
+  .panel-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 17px;cursor:pointer}
+  .panel:not(.shut) .panel-head{border-bottom:1px solid var(--line)}
+  .panel-head:hover .ttl{color:var(--mark)}
+  .num{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--fg-faint)}
+  .ttl{font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:22px;line-height:1;margin:0}
+  .head-meta{display:flex;align-items:center;gap:8px}
+  .chip{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line-strong);border-radius:99px;padding:3px 8px;color:var(--fg-mute);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .chip.filled{border-color:var(--accent);color:var(--mark)}
+  .caret{font-family:var(--f-mono);font-size:13px;color:var(--fg-faint);width:1em;text-align:center}
+  .panel.shut .panel-body{display:none}
+  .panel-body{padding:17px}
+
+  .context{background:var(--bg-sunk);border-left:2px solid var(--accent);border-radius:0 var(--r) var(--r) 0;padding:11px 14px;margin:0 0 18px}
+  .context h4{margin:0 0 6px;color:var(--fg-faint);font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:400}
+  .context ul{margin:0;padding-left:15px;display:flex;flex-direction:column;gap:3px}
+  .context li{color:var(--fg-mute);font-size:13px;line-height:1.45}
+  .context li b{color:var(--fg);font-weight:600}
+
+  .inv{margin:0 0 20px}
+  .inv-top h4{margin:0;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg);font-weight:400}
+  .inv-top .hint{display:block;color:var(--fg-faint);font-size:12.5px;margin-top:2px}
+  .inv-wrap{overflow-x:auto;border:1px solid var(--line-strong);border-radius:var(--r);margin-top:9px}
+  table.inv-t{border-collapse:collapse;width:100%;min-width:640px}
+  table.inv-t th{text-align:left;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg-faint);font-weight:400;padding:8px 10px;background:var(--bg-sunk);border-bottom:1px solid var(--line-strong)}
+  table.inv-t td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top;background:var(--bg-row)}
+  table.inv-t tr:last-child td{border-bottom:0}
+  table.inv-t .c-el{width:28%}
+  table.inv-t .c-do{width:44%}
+  table.inv-t .c-go{width:28%}
+  table.inv-t input[type=text],table.inv-t textarea{font-size:13px;padding:7px 9px;border-radius:6px}
+  table.inv-t textarea{min-height:36px}
+  .inv-add{margin-top:9px}
+
+  .fields{display:grid;grid-template-columns:1fr;gap:14px}
+  @media (min-width:780px){.fields{grid-template-columns:1fr 1fr}.f-wide{grid-column:1/-1}}
+  .field{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .field > label,.field > .lab{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg)}
+  .field .hint{color:var(--fg-faint);font-size:12.5px;line-height:1.4}
+  textarea,input[type=text],select{
+    font-family:var(--f-body);font-size:14px;line-height:1.5;color:var(--fg);
+    background:var(--field-bg);border:1px solid var(--line-strong);border-radius:var(--r);padding:9px 11px;width:100%;
+  }
+  textarea{resize:vertical;min-height:54px}
+  select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--fg-mute) 50%),linear-gradient(135deg,var(--fg-mute) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
+  textarea:focus,input:focus,select:focus{border-color:var(--mark)}
+  textarea::placeholder,input::placeholder{color:var(--fg-faint)}
+
+  .status{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line-strong)}
+  .opts{display:flex;gap:6px;flex-wrap:wrap}
+  .opt{position:relative}
+  .opt input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+  .opt span{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line-strong);padding:7px 11px;color:var(--fg-mute);border-radius:99px;white-space:nowrap}
+  .opt input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+  .opt input:focus-visible + span{outline:2px solid var(--mark);outline-offset:2px}
+  .opt input:hover + span{border-color:var(--accent)}
+
+  .flags{border:1px solid var(--line-strong);border-radius:var(--r);background:var(--bg-panel);padding:22px 20px 20px;margin:0 0 18px;position:relative}
+  .tape{position:absolute;top:-12px;left:20px;transform:rotate(-1.6deg);background:var(--tape);color:var(--tape-fg);font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:5px 11px;border-radius:4px}
+  .flags h3{margin:6px 0 12px;font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:24px;line-height:1}
+  .flags ol{margin:0 0 16px;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+  .flags li{color:var(--fg-mute);font-size:13.5px;line-height:1.5}
+  .flags li b{color:var(--fg)}
+
+  .foot{grid-column:1/-1;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);color:var(--fg-faint);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+
+  /* ---------- submit result ---------- */
+  .sent{margin:14px 0 0;padding:12px 14px;border-radius:var(--r);font-size:13.5px;line-height:1.5;display:none}
+  .sent.ok{display:block;background:rgba(139,107,247,.12);border:1px solid var(--accent);color:var(--fg)}
+  .sent.bad{display:block;background:rgba(255,255,255,.04);border:1px solid var(--line-strong);color:var(--fg-mute)}
+  .sent b{color:var(--mark)}
+
+  /* ---------- admin inbox ---------- */
+  .inbox{border-bottom:1px solid var(--line-strong);background:var(--bg-sunk)}
+  .inbox-in{max-width:var(--w);margin:0 auto;padding:18px 20px 22px}
+  .inbox-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .inbox-top h2{margin:0;font-size:26px;margin-right:auto}
+  .inbox-top .mono{color:var(--fg-faint)}
+  .inbox-list{display:grid;grid-template-columns:1fr;gap:8px}
+  @media (min-width:800px){.inbox-list{grid-template-columns:1fr 1fr}}
+  .sub{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px}
+  .sub b{font-size:14px}
+  .sub .meta{display:block;color:var(--fg-faint);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+  .inbox-empty{margin:0;color:var(--fg-faint);font-size:13.5px}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+  html{scroll-behavior:smooth}
+
+  @media print{
+    .bar,.rail,.caret,.inv-add{display:none}
+    body{background:#fff;color:#000;background-image:none}
+    .shell{display:block;max-width:none;padding:0}
+    .panel,.flags,.who{break-inside:avoid;border-color:#999;background:#fff}
+    .panel.shut .panel-body{display:block}
+    .context,table.inv-t td,table.inv-t th{background:#f4f4f6;color:#000}
+    textarea,input,select{border-color:#999;color:#000;background:#fff}
+    .ttl,.num,.chip,.field > label,.field > .lab,.context li,.opt span{color:#000}
+  }
+</style>
+
+<div class="bar">
+  <div class="bar-in">
+    <span class="bar-id">
+      <b>How every section works</b>
+      <span class="mono">Homepage Revamp 2026 &middot; Bombay Shaving Company</span>
+    </span>
+    <span class="meter">
+      <span class="meter-track"><span class="meter-fill" id="fill"></span></span>
+      <b id="pct">0%</b>
+    </span>
+    <span class="saved" id="saved">Saves as you type</span>
+    <button class="btn" id="btn-expand" type="button">Open all</button>
+    <button class="btn" id="btn-md" type="button">.md</button>
+    <button class="btn" id="btn-json" type="button">.json</button>
+    <button class="btn solid" id="btn-submit" type="button">Submit answers</button>
+    <input type="file" id="file-in" accept=".json,application/json" hidden>
+  </div>
+</div>
+
+<div class="inbox" id="inbox" hidden>
+  <div class="inbox-in">
+    <div class="inbox-top">
+      <h2 class="disp">Submissions</h2>
+      <span class="mono" id="inbox-count">&mdash;</span>
+      <button class="btn" id="btn-refresh" type="button">Refresh</button>
+      <button class="btn" id="btn-mergeall" type="button">Merge all into form</button>
+      <button class="btn" id="btn-load" type="button">Load a .json file</button>
+      <button class="btn" id="btn-hide" type="button">Hide</button>
+    </div>
+    <div id="inbox-list" class="inbox-list"><p class="inbox-empty">Unlocking&hellip;</p></div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <header class="mast">
+    <p class="mono eyebrow">[ Functional specification &middot; Homepage &middot; Draft ]</p>
+    <h1 class="disp">Twenty-one sections.<br><em>What does each one do?</em></h1>
+    <p class="lede">The Figma shows what the page looks like. This defines what it <b>does</b> &mdash; every clickable part and where it goes, what content fills it, how it moves, what it shows when there&rsquo;s nothing to show. Each panel opens with what&rsquo;s already in the design, so you only write what the design can&rsquo;t say. <b>Six questions and one table per section.</b></p>
+    <div class="files">
+      <a class="file" href="https://www.figma.com/design/LaH8RPzg9FMAR15dfawyXG/Revamp-2026-May?node-id=623-47547" target="_blank" rel="noopener"><b>Mobile</b> 390&times;8554</a>
+      <a class="file" href="https://www.figma.com/design/LaH8RPzg9FMAR15dfawyXG/Revamp-2026-May?node-id=1006-48869" target="_blank" rel="noopener"><b>Desktop</b> 1440&times;10966</a>
+    </div>
+  </header>
+
+  <nav class="rail" aria-label="Section index">
+    <h2 class="mono">Sections</h2>
+    <ol id="rail"></ol>
+  </nav>
+
+  <main id="form">
+    <section class="who">
+      <div class="who-grid">
+        <div class="field"><label for="who-name">Filled in by</label>
+          <input type="text" id="who-name" data-k="who-name" placeholder="Name"></div>
+        <div class="field"><label for="who-scope">Sections covered</label>
+          <input type="text" id="who-scope" data-k="who-scope" placeholder="e.g. S4, S6, S8 &mdash; or &ldquo;all&rdquo;"></div>
+        <div class="field"><label for="who-date">Date</label>
+          <input type="text" id="who-date" data-k="who-date" placeholder="DD / MM / YYYY"></div>
+      </div>
+      <p class="who-note">Answers save to this browser as you type, so you can leave and come back. When you&rsquo;re done, hit <b>Submit answers</b> &mdash; that sends them to us; nothing leaves this page until you do. Several people can split the sections and each submit their own. <b>.md</b> and <b>.json</b> save a copy for yourself.</p>
+      <p class="sent" id="sent"></p>
+    </section>
+
+    <section class="flags">
+      <span class="tape">Answer first &mdash; blocks the rest</span>
+      <h3>Behaviour the design can&rsquo;t show</h3>
+      <ol>
+        <li><b>&ldquo;The Legend Song&rdquo;</b> and <b>&ldquo;KKK Rap Battles&rdquo;</b> are labelled on the canvas with no built frame. Separate modules, or alternate content for the video carousels?</li>
+        <li><b>&ldquo;Trimmers by BSC TV&rdquo;</b> is labelled too. Same module as <em>Khul Ke Express</em>, or a second video shelf?</li>
+        <li><b>Three category lists that don&rsquo;t reconcile:</b> 9 desktop nav items, ~6 in the mobile rail, 5 tiles &mdash; plus <em>Gifting</em> vs <em>Gifts</em>. Which is canonical?</li>
+        <li><b>Eight dots on all eight carousels.</b> Real item count, or placeholder? Decides whether pagination is generated or fixed.</li>
+        <li><b>No playback rules on any video section</b> &mdash; no play button, no mute, no duration. Autoplay muted in view, or tap to play?</li>
+      </ol>
+      <div class="fields">
+        <div class="field f-wide">
+          <label for="flags-notes">Resolutions</label>
+          <textarea id="flags-notes" data-k="flags-notes" rows="3" placeholder="One line each, numbered, so the sections below can be filled without guessing."></textarea>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <p class="foot">Stored in this browser only &middot; export before you close the tab</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var STORE = "bsc-homepage-fnspec-v5";
+var SAVED = {};
+try{ SAVED = JSON.parse(window.localStorage.getItem(STORE) || "{}") || {}; }catch(e){ SAVED = {}; }
+
+var STATUS = ["Fully defined","Needs a decision","Not in the design","Cut"];
+
+/* ---------- sections: trimmed context + the parts to spec ---------- */
+var SECTIONS = [
+
+ {g:"Page-wide", id:"G0", name:"Page-wide mechanics", where:"Both", global:true,
+  design:[
+   "Mobile <b>390&times;8554</b>, desktop <b>1440&times;10966</b> &mdash; same 21 sections, same order, reflowed.",
+   "<b>Eight sections are carousels</b>, all drawn with identical arrows and eight dots. Define the shared behaviour here; sections below only note where they differ."
+  ]},
+
+ {g:"Chrome", id:"C1", name:"Announcement marquee", where:"Both",
+  design:[
+   "Yellow strip, black type, scrolling right-to-left and repeating: <b>AIR JUST LAUNCHED &middot; KHUL KE KHEL &middot; FREE SHIPPING ON ORDERS OVER &#8377;399</b>.",
+   "Above the header on both breakpoints. No close button, no arrows."
+  ],
+  els:[["Marquee track (right to left)"],["&ldquo;AIR JUST LAUNCHED&rdquo;"],["&ldquo;KHUL KE KHEL&rdquo;"],["&ldquo;FREE SHIPPING OVER &#8377;399&rdquo;"]]},
+
+ {g:"Chrome", id:"C2", name:"Header &amp; utility icons", where:"Both",
+  design:[
+   "Mobile: hamburger, centred wordmark, then wishlist heart, account, cart with a <b>numeric badge</b>.",
+   "Desktop: wordmark left, full-width search centre, same three icons as outlined round buttons. No hamburger."
+  ],
+  els:[["Hamburger (mobile only)"],["Wordmark"],["Wishlist heart"],["Account icon"],["Cart icon"],["Cart count badge"]]},
+
+ {g:"Chrome", id:"C3", name:"Category navigation", where:"Both",
+  design:[
+   "Mobile: scrolling rail of image tiles &mdash; <b>Shop All</b> (active, yellow), Trimmer, Razor, Fragrance, Skincare, cut off at the edge.",
+   "Desktop: text row &mdash; Shop All, Trimmer, Razor, Fragrance, Skincare, <b>Gifting, Bestsellers, Blogs, Women</b>. Four entries mobile doesn&rsquo;t have."
+  ],
+  els:[["Category tile + label (mobile rail)"],["Active state on &ldquo;Shop All&rdquo;"],["Rail horizontal scroll"],["Nav item (desktop row)"],["&ldquo;Women&rdquo; (desktop only)"],["Hover / dropdown on a desktop nav item"]]},
+
+ {g:"Chrome", id:"C4", name:"Search", where:"Both",
+  design:[
+   "Two-tone animated placeholder: grey <b>&ldquo;Search For&rdquo;</b> plus a yellow rotating term (<b>&ldquo;Facewash&rdquo;</b> in the frame).",
+   "Mobile: own full-width row under the rail. Desktop: inside the header. No results page, dropdown or recent searches anywhere in the file."
+  ],
+  els:[["Search field"],["Rotating placeholder term"],["Search icon"],["Suggestions while typing"],["Submit (Enter)"]]},
+
+ {g:"Body", id:"S1", name:"Hero banner carousel", where:"Both",
+  design:[
+   "Edge-to-edge campaign creative &mdash; <b>&ldquo;5 products @999&rdquo;</b> on slide one. Eight dots; mobile also draws arrows over the artwork.",
+   "Each slide is <b>one flat image</b> with no separate headline or button layer, so any CTA is baked into the artwork."
+  ],
+  els:[["Banner artwork"],["Tap / click on the banner"],["Prev / next arrows (mobile)"],["Dots (8 drawn)"],["Swipe"],["Auto-advance"]]},
+
+ {g:"Body", id:"S2", name:"Brand proposition statement", where:"Both",
+  design:[
+   "Mono eyebrow <b>[ More than Shaving ]</b> over <b>&ldquo;WE BUILD TOOLS FOR EVERY PART OF YOU.&rdquo;</b>, &ldquo;EVERY PART&rdquo; in acid yellow.",
+   "Cyan sticker note on the last word: <em>&ldquo;grooming for the bits nobody else talks about properly&rdquo;</em>. Type only &mdash; nothing interactive drawn."
+  ],
+  els:[["Headline"],["Cyan sticker note"],["Reveal on scroll"]]},
+
+ {g:"Body", id:"S3", name:"Trust stats marquee", where:"Both",
+  design:[
+   "Wireframe globe over each stat, scrolling sideways and looping off both edges: <b>4 Million+ Customers</b> (yellow <em>+counting&hellip;</em> sticker), <b>10 years Of Innovation</b>, <b>Top D2C brand In India 2025</b>, <b>100+ Active Products</b>.",
+   "All four are flat text in the design."
+  ],
+  els:[["Marquee track"],["Stat value"],["&ldquo;+counting&hellip;&rdquo; sticker"],["Globe graphic"]]},
+
+ {g:"Body", id:"S4", name:"Our Bestsellers carousel", where:"Both",
+  design:[
+   "<b>[ OUR BESTSELLERS ]</b> with <b>View all &rarr;</b> right-aligned.",
+   "Card: image, yellow <b>BESTSELLER</b> ribbon across the image foot, wishlist heart top-right, title, <b>&#9733;4.7</b>, cyan attribute tags (Beard, Body, Balls, Nose, Shave), <b>&#8377;949</b> / struck &#8377;3,999 / <b>20% OFF</b> green, full-width <b>+ Add To Cart</b>.",
+   "Mobile ~1.7 cards, swipe; desktop 4 cards with arrows outside the track. Eight dots."
+  ],
+  els:[["&ldquo;View all &rarr;&rdquo;"],["Product image"],["&ldquo;BESTSELLER&rdquo; ribbon"],["Wishlist heart"],["Product title"],["Rating &ldquo;&#9733;4.7&rdquo;"],["Attribute tags"],["Price / MRP / % off"],["&ldquo;+ Add To Cart&rdquo;"],["Arrows (desktop)"],["Dots (8 drawn)"],["Swipe (mobile)"]]},
+
+ {g:"Body", id:"S5", name:"Khul Ke Khel definition", where:"Both",
+  design:[
+   "Graffiti-wall photo ground, <b>speaker icon</b> beside the title &mdash; pronunciation audio is intended.",
+   "Dictionary entry: <b>Khul Ke Khel</b> / <em>/khul ke khel/</em> / <b>phrase &middot; Hindi</b> / cyan <em>&ldquo;Limitless self-expression&rdquo;</em>, yellow <em>&ldquo;We Advocate&rdquo;</em> sticker. Mobile stacks; desktop side by side."
+  ],
+  els:[["Speaker icon"],["Pronunciation audio"],["Definition text block"],["&ldquo;We Advocate&rdquo; sticker"]]},
+
+ {g:"Body", id:"S6", name:"Spotlight &mdash; new drops", where:"Both",
+  design:[
+   "Dotted off-white ground. Blue <b>SPOTLIGHT</b> + yellow <em>&ldquo;Refreshed Weekly&rdquo;</em> sticker, subhead <b>NEW DROPS &amp; LOW PRICES.</b>",
+   "A <b>coverflow</b>, not equal cards: one hero product centred, smaller ones fading either side. Below: BESTSELLER ribbon, title, heart, price with struck MRP and % off, wide <b>+ ADD TO CART</b>, chevrons, eight dots.",
+   "Desktop price reads <b>&#8377;1,99,999</b> &mdash; placeholder, not a real SKU."
+  ],
+  els:[["&ldquo;Refreshed Weekly&rdquo; sticker"],["Centre hero product"],["Side (faded) product"],["Wishlist heart"],["Price / MRP / % off"],["&ldquo;+ ADD TO CART&rdquo;"],["Chevron arrows"],["Dots (8 drawn)"]]},
+
+ {g:"Body", id:"S7", name:"&ldquo;We dropped it&rdquo; story carousel", where:"Both",
+  design:[
+   "<b>&ldquo;GROOMING USED TO COME WITH A SIDE OF SHAME. WE DROPPED IT.&rdquo;</b> in cyan and yellow emphasis.",
+   "Beside it a stack: note card carrying a customer review (dummy copy: <em>&ldquo;wow wow wow some similar review for LEGEND 365&rdquo;</em>), product photographed over it, <b>View Product &nearr;</b> pill.",
+   "Captioned <b>[ what the group chat said ]</b>. Eight dots; mobile adds arrows. Mobile stacks, desktop side by side."
+  ],
+  els:[["Headline"],["Review note card"],["Product image"],["&ldquo;View Product &nearr;&rdquo; pill"],["Arrows (mobile)"],["Dots (8 drawn)"],["Swipe"]]},
+
+ {g:"Body", id:"S8", name:"&ldquo;Let&rsquo;s Get Real&rdquo; UGC reels", where:"Both",
+  design:[
+   "Yellow 3D <b>LET&rsquo;S GET REAL</b> repeated twice, then a track of vertical phone-shot videos on a slight arc &mdash; gym, street, bedroom.",
+   "Only the centre tile carries a product thumbnail and <b>View Product &nearr;</b> pill, so tiles are shoppable and the pill follows the active tile.",
+   "Arrows, eight dots. Mobile ~1.5 tiles, desktop about five."
+  ],
+  els:[["Video tile"],["Tap / click on a tile"],["Product thumbnail on active tile"],["&ldquo;View Product &nearr;&rdquo; pill"],["Sound on / off"],["Arrows"],["Dots (8 drawn)"],["Swipe"]]},
+
+ {g:"Body", id:"S9", name:"Shop by category tiles", where:"Both",
+  design:[
+   "Model-led photo tiles with the label <b>burned into the artwork</b>: TRIMMERS, RAZORS, FRAGRANCES, SKINCARE, GIFTS.",
+   "Mobile: Trimmers+Razors 2-up, Fragrances full-bleed, Skincare+Gifts 2-up. Desktop: uneven mosaic, different crops and sizes.",
+   "Five categories against nine in the desktop nav, and no <em>Gifting</em>/<em>Gifts</em> match."
+  ],
+  els:[["Tile image"],["Burned-in label"],["Hover state (desktop)"]]},
+
+ {g:"Body", id:"S10", name:"Khul Ke Express &mdash; creators", where:"Both",
+  design:[
+   "<b>[ FOR THE CULTURE ]</b>, then <b>KHUL KE</b> over yellow <b>EXPRESS</b> with a cyan <em>&ldquo;ft. trimmersbybsc&rdquo;</em> sticker.",
+   "Creator video tiles captioned with the handle in brackets &mdash; <b>[ CHARDIWARI ]</b>, <b>[ MILAN KULSHRESTHA ]</b> (yellow <em>&ldquo;Natak Boy&rdquo;</em> sticker). Two desktop tiles are empty grey placeholders.",
+   "Arrows, eight dots. <b>No product link drawn</b>, unlike &ldquo;Let&rsquo;s Get Real&rdquo;."
+  ],
+  els:[["&ldquo;ft. trimmersbybsc&rdquo; sticker"],["Creator video tile"],["Creator handle caption"],["&ldquo;Natak Boy&rdquo; sticker"],["Empty grey placeholder tiles"],["Arrows"],["Dots (8 drawn)"]]},
+
+ {g:"Body", id:"S11", name:"The BSC Code &mdash; value cards", where:"Both",
+  design:[
+   "Dotted ground. Eyebrow <b>[ WHY PEOPLE TRUSTS US ]</b> (typo in the design) over blue <b>THE BSC CODE</b>.",
+   "Four photo cards, caption over image, no body copy: <b>Products over promises</b>, <b>Designed for Indian men</b>, <b>innovation to solve real problems</b>, <b>India&rsquo;s Top D2C Brand</b>.",
+   "Mobile 2&times;2, desktop 4-across. Static &mdash; no arrows, no dots."
+  ],
+  els:[["Card image"],["Card caption"],["The card as a whole"]]},
+
+ {g:"Body", id:"S12", name:"Experience Before You Buy &mdash; stores", where:"Both",
+  design:[
+   "<b>[ EXPERIENCE BEFORE YOU BUY ]</b> with <b>Delhi &#10033; Mumbai &#10033; Bangalore &#10033; Kerala &#10033; Chennai +more soon</b>.",
+   "Store card: shopfront photo, name + <b>&#9733;4.7</b>, address line. Desktop adds blurred <b>COMING SOON</b> cards for <b>Mumbai</b> and <b>Gurugram</b>.",
+   "Arrows, eight dots. No map, no distance, no locator search."
+  ],
+  els:[["City line"],["Store photo"],["Store name + rating"],["Address line"],["Blurred &ldquo;COMING SOON&rdquo; card"],["Arrows"],["Dots (8 drawn)"]]},
+
+ {g:"Body", id:"S13", name:"Blogs", where:"Both",
+  design:[
+   "<b>BLOGS</b>. Card = editorial image, title, two-line excerpt, <b>Read More</b> button.",
+   "Real titles in the frame, e.g. <em>&ldquo;Why Your Beard Never Looks Even (Even After Trimming)&rdquo;</em>. Mobile swipes ~1.5 cards, desktop shows three, with no dots or arrows drawn on desktop."
+  ],
+  els:[["Article image"],["Article title"],["Two-line excerpt"],["&ldquo;Read More&rdquo;"],["Swipe (mobile)"]]},
+
+ {g:"Chrome", id:"C5", name:"Secure payment strip", where:"Both",
+  design:[
+   "<b>100%</b> white over cyan <b>Secure Payment</b>, badges beside it.",
+   "Mobile lists eight (Paytm, RuPay, UPI, Google Pay, Visa, Simpl, Mastercard, PhonePe); desktop six (drops UPI, Simpl, PhonePe; adds Amazon Pay). <b>The lists don&rsquo;t match.</b>"
+  ],
+  els:[["&ldquo;100% Secure Payment&rdquo;"],["Payment badge"]]},
+
+ {g:"Chrome", id:"C6", name:"Newsletter signup", where:"Both",
+  design:[
+   "<em>&ldquo;Sign Up For Exclusive Updates, New Arrivals &amp; Insider Only Discounts&rdquo;</em>, email field, <b>Subscribe</b>.",
+   "Mobile stacks pitch / field / button; desktop is one pill field with the pitch as placeholder and Subscribe inline. <b>No consent checkbox, no success or error state drawn.</b>"
+  ],
+  els:[["Email field"],["&ldquo;Subscribe&rdquo;"],["Consent checkbox (not designed)"],["Success / error message (not designed)"]]},
+
+ {g:"Chrome", id:"C7", name:"Footer", where:"Both",
+  design:[
+   "Five columns &mdash; <b>SHOP</b> (Trimmers, Razor, Fragrances, Shaving, Beard Care, Hair Care, Bath Care, Best Seller, Special Offers, Face Wash For Men, Corporate Gifting), <b>RESOURCES</b> (Blogs, FAQs, Sitemap), <b>CUSTOMER SERVICE</b> (Contact Us, Track Your Order, Cancel Order, Register Trimmer Warranty, Franchise Enquiry), <b>BOMBAY SHAVING</b> (About Us, Career, Investors), <b>POLICIES</b> (Privacy, Returns, Shipping, Terms).",
+   "Social icons (Instagram, Facebook, X, YouTube) centred, then <b>&copy; 2024</b> &mdash; stale. Mobile stacks columns 2-up."
+  ],
+  els:[["Footer link"],["Social icon"],["Copyright line"]]}
+];
+
+/* ---------- six questions per section ---------- */
+var FIELDS = [
+ {k:"purpose", w:2, l:"What this section does", type:"text",
+  h:"One line. The job, not the look.",
+  p:"Puts four proven products in front of a visitor who arrived without one in mind."},
+ {k:"source", w:1, l:"Content source", type:"select",
+  o:["","Shopify collection","Shopify metafields","CMS entry (editable)","Hardcoded in build","Third-party feed / API","Algorithmic / ranked","User-generated, curated","Not decided"],
+  h:"Whether it&rsquo;s editable without a deploy."},
+ {k:"content", w:1, l:"Which items, how many, what order, how often",
+  h:"Name the collection or model, then the count, sort, refresh cadence, who edits it, and the fallback when there aren&rsquo;t enough items.",
+  p:"collection: homepage-bestsellers · 8 items, manual order, merch edits weekly · under 4 in stock: hide section"},
+ {k:"behaviour", w:2, l:"Movement &amp; controls",
+  h:"Autoplay and speed, loop or stop at the ends, pause on hover, swipe, tappable dots, keyboard access, reduced-motion.",
+  p:"Advances every 5s, stops permanently once swiped, loops, dots tappable, arrows disable at the ends."},
+ {k:"states", w:1, l:"States &amp; failure",
+  h:"Loading, empty, error, out of stock, price missing, guest vs logged in.",
+  p:"Loading: 4 skeletons. Out of stock: ribbon reads SOLD OUT, button becomes Notify Me."},
+ {k:"responsive", w:1, l:"Mobile vs desktop",
+  h:"Functional deltas only &mdash; items visible, controls shown or hidden, anything reordered or dropped.",
+  p:"Mobile 1.7 cards, swipe only, no arrows. Desktop 4 cards, arrows shown."},
+ {k:"rules", w:2, l:"Hard limits, must-nevers &amp; open questions",
+  h:"Constraints that would be wrong to break, plus anything still undecided &mdash; leaving that honest is more useful than filling it in.",
+  p:"Never show % off under 5%. Titles truncate at two lines. Open: does the heart work for guests?"}
+];
+
+var GLOBAL_FIELDS = [
+ {k:"carousels", w:2, l:"The carousel convention",
+  h:"Define it once for all eight: controls, looping, autoplay, dot generation, keyboard, reduced-motion.",
+  p:"One component. Swipe + arrows + tappable dots, loops, no autoplay except the hero. Dots generated from item count."},
+ {k:"cart", w:2, l:"Cart &amp; wishlist behaviour",
+  h:"What Add To Cart does everywhere (drawer, toast, page change, variant picker), and what the heart does for guests vs logged in.",
+  p:"Cart drawer + toast; variant picker first if the product has options. Heart prompts login for guests."},
+ {k:"chrome", w:2, l:"Sticky elements &amp; media loading",
+  h:"Which of announcement bar / header / category nav stay on scroll, and how images and video load across an 11,000px page with eight carousels.",
+  p:"Header sticks and compresses, announcement scrolls away. Everything below the hero lazy-loads; video autoplays muted at 50% in view."},
+ {k:"gnotes", w:2, l:"URLs, auth &amp; anything else page-wide",
+  h:"Whether any section changes the URL or deep-links to a slide, back-button behaviour, and what differs once someone is signed in.",
+  p:"No section changes the URL. Back from a PDP restores scroll position and slide. No personalisation in v1."}
+];
+
+/* ---------- helpers ---------- */
+var esc = function(s){return String(s).replace(/&(?![a-z#0-9]+;)/gi,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");};
+function strip(h){var d=document.createElement("div");d.innerHTML=h;return (d.textContent||"").replace(/\s+/g," ").trim();}
+
+function fieldHTML(id,f){
+  var dk = id + "-" + f.k;
+  var cls = "field" + (f.w === 2 ? " f-wide" : "");
+  var ctl;
+  if(f.type === "select"){
+    ctl = '<select id="'+dk+'" data-k="'+dk+'">'+f.o.map(function(o){
+      return '<option value="'+esc(o)+'">'+(o ? esc(o) : "&mdash; choose &mdash;")+'</option>';
+    }).join("")+'</select>';
+  } else if(f.type === "text"){
+    ctl = '<input type="text" id="'+dk+'" data-k="'+dk+'" placeholder="'+(f.p?esc(f.p):"")+'">';
+  } else {
+    ctl = '<textarea id="'+dk+'" data-k="'+dk+'" rows="2" placeholder="'+(f.p?esc(f.p):"")+'"></textarea>';
+  }
+  return '<div class="'+cls+'"><label for="'+dk+'">'+f.l+'</label><span class="hint">'+f.h+'</span>'+ctl+'</div>';
+}
+
+function rowHTML(id,i,el){
+  var b = id + "-el" + i + "-";
+  var nameVal = el ? strip(el[0]) : "";
+  return '<tr>'+
+    '<td class="c-el"><input type="text" data-k="'+b+'name" value="'+esc(nameVal)+'" placeholder="Element"></td>'+
+    '<td class="c-do"><textarea data-k="'+b+'does" rows="1" placeholder="What happens when it&rsquo;s used"></textarea></td>'+
+    '<td class="c-go"><input type="text" data-k="'+b+'dest" placeholder="Destination / result"></td>'+
+  '</tr>';
+}
+
+function invHTML(s){
+  var els = s.els || [];
+  var stored = parseInt(SAVED[s.id + "-elcount"], 10) || 0;
+  var n = Math.max(els.length, stored);
+  var rows = "";
+  for(var i = 0; i < n; i++){ rows += rowHTML(s.id, i, els[i]); }
+  return '<div class="inv" data-inv="'+s.id+'" data-rows="'+n+'">'+
+    '<div class="inv-top"><h4>Every part, and what it does</h4>'+
+      '<span class="hint">Pre-filled from the Figma &mdash; fill the last two columns, add anything missing.</span></div>'+
+    '<div class="inv-wrap"><table class="inv-t"><thead><tr>'+
+      '<th class="c-el">Element</th><th class="c-do">What happens when it&rsquo;s used</th><th class="c-go">Destination / result</th>'+
+    '</tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<button class="btn inv-add" type="button" data-add="'+s.id+'">+ Add element</button>'+
+  '</div>';
+}
+
+function statusHTML(id){
+  return '<div class="status"><div class="field">'+
+    '<span class="lab">Functional status</span>'+
+    '<span class="hint">Could a developer build this from the above without asking anyone?</span>'+
+    '<span class="opts">'+STATUS.map(function(o){
+      return '<label class="opt"><input type="radio" name="'+id+'-st" value="'+esc(o)+'" data-k="'+id+'-st"><span>'+o+'</span></label>';
+    }).join("")+'</span></div></div>';
+}
+
+/* ---------- render ---------- */
+var form = document.getElementById("form");
+var rail = document.getElementById("rail");
+var railHTML = "", lastGroup = "";
+
+SECTIONS.forEach(function(s, idx){
+  var fields = s.global ? GLOBAL_FIELDS : FIELDS;
+  var panel = document.createElement("section");
+  panel.className = "panel" + (idx === 0 ? "" : " shut");
+  panel.id = "sec-" + s.id;
+  panel.dataset.id = s.id;
+  panel.innerHTML =
+    '<div class="panel-head" role="button" tabindex="0" aria-expanded="'+(idx===0?"true":"false")+'" aria-controls="body-'+s.id+'">'+
+      '<span class="num">'+s.id+'</span>'+
+      '<h3 class="ttl">'+s.name+'</h3>'+
+      '<span class="head-meta"><span class="chip" data-count>0/0</span>'+
+      '<span class="caret">'+(idx===0?"&minus;":"+")+'</span></span>'+
+    '</div>'+
+    '<div class="panel-body" id="body-'+s.id+'">'+
+      '<div class="context"><h4>In the design</h4><ul>'+
+        s.design.map(function(d){return "<li>"+d+"</li>";}).join("")+
+      '</ul></div>'+
+      (s.global ? "" : invHTML(s))+
+      '<div class="fields">'+fields.map(function(f){return fieldHTML(s.id,f);}).join("")+'</div>'+
+      (s.global ? "" : statusHTML(s.id))+
+    '</div>';
+  form.appendChild(panel);
+
+  if(s.g !== lastGroup){ railHTML += '<li class="grp">'+s.g+'</li>'; lastGroup = s.g; }
+  railHTML += '<li><a href="#sec-'+s.id+'" data-for="'+s.id+'"><span class="tick">&#9633;</span><span>'+
+    strip(s.name).replace(/\s+—.*$/,"")+'</span></a></li>';
+});
+rail.innerHTML = railHTML;
+
+/* ---------- persistence ---------- */
+var saveNote = document.getElementById("saved");
+var noteTimer;
+function allInputs(){ return Array.prototype.slice.call(document.querySelectorAll("[data-k]")); }
+
+function load(){
+  allInputs().forEach(function(el){
+    var k = el.dataset.k;
+    if(!(k in SAVED)) return;
+    if(el.type === "radio"){ if(SAVED[k] === el.value) el.checked = true; }
+    else { el.value = SAVED[k]; }
+  });
+}
+function save(){
+  var data = {};
+  allInputs().forEach(function(el){
+    var k = el.dataset.k;
+    if(el.type === "radio"){ if(el.checked) data[k] = el.value; }
+    else if(String(el.value).trim()) data[k] = el.value;
+  });
+  document.querySelectorAll("[data-inv]").forEach(function(inv){
+    data[inv.dataset.inv + "-elcount"] = inv.dataset.rows;
+  });
+  SAVED = data;
+  try{ window.localStorage.setItem(STORE, JSON.stringify(data)); }catch(e){ return; }
+  saveNote.textContent = "Saved";
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(function(){ saveNote.textContent = "Saves as you type"; }, 1600);
+}
+
+/* ---------- progress ---------- */
+var fill = document.getElementById("fill");
+var pct = document.getElementById("pct");
+
+function refresh(){
+  var total = 0, done = 0;
+
+  document.querySelectorAll(".panel").forEach(function(p){
+    var t = 0, d = 0;
+
+    var inv = p.querySelector("[data-inv]");
+    if(inv){
+      var named = 0, said = 0;
+      inv.querySelectorAll("tbody tr").forEach(function(tr){
+        var nm = tr.querySelector('[data-k$="-name"]');
+        var dz = tr.querySelector('[data-k$="-does"]');
+        if(nm && nm.value.trim()){ named++; if(dz && dz.value.trim()) said++; }
+      });
+      t += 1;
+      if(named > 0 && said === named) d += 1;
+    }
+
+    var seen = {};
+    p.querySelectorAll(".fields [data-k], .status [data-k]").forEach(function(el){
+      var k = el.type === "radio" ? el.name : el.dataset.k;
+      if(!seen[k]){ seen[k] = 1; t++; }
+      var ok = el.type === "radio" ? el.checked : String(el.value).trim() !== "";
+      if(ok && seen[k] !== 2){ d++; seen[k] = 2; }
+    });
+
+    var chip = p.querySelector("[data-count]");
+    if(chip){
+      chip.textContent = d + "/" + t;
+      chip.classList.toggle("filled", t > 0 && d === t);
+    }
+    var link = rail.querySelector('a[data-for="'+p.dataset.id+'"]');
+    if(link){
+      var full = (t > 0 && d === t);
+      link.classList.toggle("done", full);
+      link.querySelector(".tick").innerHTML = full ? "&#9632;" : (d ? "&#9642;" : "&#9633;");
+    }
+    total += t; done += d;
+  });
+
+  total += 1;
+  if(document.getElementById("flags-notes").value.trim()) done += 1;
+
+  var p2 = total ? Math.round(done / total * 100) : 0;
+  fill.style.width = p2 + "%";
+  pct.textContent = p2 + "%";
+}
+
+document.addEventListener("input", function(e){
+  if(!e.target.dataset || !e.target.dataset.k) return;
+  save(); refresh();
+});
+document.addEventListener("change", function(e){
+  if(!e.target.dataset || !e.target.dataset.k) return;
+  save(); refresh();
+});
+
+/* ---------- add a row ---------- */
+document.addEventListener("click", function(e){
+  var add = e.target.closest("[data-add]");
+  if(!add) return;
+  var inv = document.querySelector('[data-inv="'+add.dataset.add+'"]');
+  var i = parseInt(inv.dataset.rows, 10);
+  var tbody = inv.querySelector("tbody");
+  tbody.insertAdjacentHTML("beforeend", rowHTML(add.dataset.add, i, null));
+  inv.dataset.rows = i + 1;
+  var last = tbody.lastElementChild.querySelector("input");
+  if(last) last.focus();
+  save(); refresh();
+});
+
+/* ---------- open / close ---------- */
+function toggle(head){
+  var panel = head.closest(".panel");
+  panel.classList.toggle("shut");
+  var shut = panel.classList.contains("shut");
+  head.setAttribute("aria-expanded", shut ? "false" : "true");
+  head.querySelector(".caret").innerHTML = shut ? "+" : "&minus;";
+}
+document.addEventListener("click", function(e){
+  if(e.target.closest("[data-add]")) return;
+  var head = e.target.closest(".panel-head");
+  if(head) toggle(head);
+});
+document.addEventListener("keydown", function(e){
+  if(e.key !== "Enter" && e.key !== " ") return;
+  var head = e.target.closest(".panel-head");
+  if(head && e.target === head){ e.preventDefault(); toggle(head); }
+});
+var expandBtn = document.getElementById("btn-expand");
+expandBtn.addEventListener("click", function(){
+  var anyShut = document.querySelector(".panel.shut");
+  document.querySelectorAll(".panel-head").forEach(function(h){
+    var shut = h.closest(".panel").classList.contains("shut");
+    if(anyShut ? shut : !shut) toggle(h);
+  });
+  expandBtn.textContent = anyShut ? "Close all" : "Open all";
+});
+
+/* ---------- rail highlight ---------- */
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    var link = rail.querySelector('a[data-for="'+en.target.dataset.id+'"]');
+    if(link) link.classList.toggle("on", en.isIntersecting);
+  });
+}, {rootMargin:"-70px 0px -65% 0px"});
+document.querySelectorAll(".panel").forEach(function(p){ obs.observe(p); });
+
+/* ---------- export ---------- */
+function val(k){
+  var el = document.querySelector('[data-k="'+String(k).replace(/"/g,"")+'"]');
+  if(!el) return "";
+  if(el.type === "radio"){
+    var picked = document.querySelector('[data-k="'+k+'"]:checked');
+    return picked ? picked.value : "";
+  }
+  return String(el.value).trim();
+}
+function cell(s){ return (s || "—").replace(/\|/g,"\\|").replace(/\n+/g," "); }
+
+function markdown(){
+  var out = [];
+  out.push("# Homepage Revamp 2026 — How every section works");
+  out.push("");
+  out.push("Functional specification. Bombay Shaving Company · Figma “Revamp 2026 May”, page “homepage”.");
+  out.push("- Mobile: https://www.figma.com/design/LaH8RPzg9FMAR15dfawyXG/Revamp-2026-May?node-id=623-47547 (390×8554)");
+  out.push("- Desktop: https://www.figma.com/design/LaH8RPzg9FMAR15dfawyXG/Revamp-2026-May?node-id=1006-48869 (1440×10966)");
+  out.push("");
+  if(val("who-name") || val("who-scope") || val("who-date")){
+    out.push("Filled in by **" + (val("who-name")||"—") + "** · covered: " + (val("who-scope")||"—") + " · " + (val("who-date")||"—"));
+    out.push("");
+  }
+  out.push("## Blockers");
+  out.push("");
+  [ "“The Legend Song” / “KKK Rap Battles” — labelled on canvas, no built frame. Separate modules or alternate video content?",
+    "“Trimmers by BSC TV” — same module as Khul Ke Express, or a second video shelf?",
+    "Category lists don't reconcile: 9 desktop nav / ~6 mobile rail / 5 tiles, plus Gifting vs Gifts.",
+    "Eight dots on all eight carousels — real count or placeholder?",
+    "No playback rules on any video section — autoplay muted in view, or tap to play?"
+  ].forEach(function(q,i){ out.push((i+1) + ". " + q); });
+  out.push("");
+  out.push("**Resolutions:** " + (val("flags-notes") || "_not answered_"));
+  out.push("");
+
+  SECTIONS.forEach(function(s){
+    var fields = s.global ? GLOBAL_FIELDS : FIELDS;
+    out.push("---");
+    out.push("");
+    out.push("## " + s.id + " · " + strip(s.name));
+    out.push("");
+    if(!s.global){ out.push("`" + s.where + "` · status: " + (val(s.id+"-st") || "_not set_")); out.push(""); }
+    out.push("**In the design**");
+    out.push("");
+    s.design.forEach(function(d){ out.push("- " + strip(d)); });
+    out.push("");
+    var inv = document.querySelector('[data-inv="'+s.id+'"]');
+    if(inv){
+      out.push("| Element | What happens | Destination / result |");
+      out.push("| --- | --- | --- |");
+      inv.querySelectorAll("tbody tr").forEach(function(tr){
+        var nm = tr.querySelector('[data-k$="-name"]');
+        if(!nm || !nm.value.trim()) return;
+        out.push("| " + cell(nm.value.trim()) +
+                 " | " + cell(tr.querySelector('[data-k$="-does"]').value.trim()) +
+                 " | " + cell(tr.querySelector('[data-k$="-dest"]').value.trim()) + " |");
+      });
+      out.push("");
+    }
+    fields.forEach(function(f){
+      out.push("**" + strip(f.l) + "**  ");
+      out.push(val(s.id + "-" + f.k) || "_not answered_");
+      out.push("");
+    });
+  });
+  return out.join("\n");
+}
+
+/* ---------- files ---------- */
+function slug(){
+  var n = val("who-name") || "bsc";
+  return n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "bsc";
+}
+function offerFile(filename, text, btn, okLabel){
+  var restore = btn.textContent;
+  var say = function(m){ btn.textContent = m; setTimeout(function(){ btn.textContent = restore; }, 2400); };
+  if(window.claude && window.claude.downloads){
+    window.claude.downloads.save({filename:filename, data:text}).then(function(){ say(okLabel); }, function(err){
+      var c = err && err.code;
+      say(c === "declined" ? "Cancelled" : (c === "rate_limited" ? "Try again" : "Save blocked"));
+    });
+    return;
+  }
+  try{
+    var blob = new Blob([text], {type: /\.json$/.test(filename) ? "application/json" : "text/markdown;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    say(okLabel);
+  }catch(e){ say("Save blocked"); }
+}
+document.getElementById("btn-md").addEventListener("click", function(){
+  offerFile("bsc-homepage-functionality-" + slug() + ".md", markdown(), this, "Done");
+});
+document.getElementById("btn-json").addEventListener("click", function(){
+  var payload = {doc:"bsc-homepage-fnspec", version:5,
+    filledBy: val("who-name"), covered: val("who-scope"), date: val("who-date"), answers: SAVED};
+  offerFile("bsc-answers-" + slug() + ".json", JSON.stringify(payload, null, 2), this, "Send this file");
+});
+
+/* ---------- merge someone else's file ---------- */
+function ensureRows(id, n){
+  var inv = document.querySelector('[data-inv="'+id+'"]');
+  if(!inv) return;
+  var have = parseInt(inv.dataset.rows, 10) || 0;
+  var tbody = inv.querySelector("tbody");
+  for(var i = have; i < n; i++){ tbody.insertAdjacentHTML("beforeend", rowHTML(id, i, null)); }
+  if(n > have) inv.dataset.rows = n;
+}
+function applyAnswers(incoming){
+  Object.keys(incoming).forEach(function(k){
+    var m = /^(.+)-elcount$/.exec(k);
+    if(m) ensureRows(m[1], parseInt(incoming[k], 10) || 0);
+  });
+  var applied = 0;
+  Object.keys(incoming).forEach(function(k){
+    var v = incoming[k];
+    if(typeof v !== "string" || !v.trim()) return;
+    var els = document.querySelectorAll('[data-k="'+k.replace(/"/g,"")+'"]');
+    if(!els.length) return;
+    if(els[0].type === "radio"){
+      var hit = false;
+      els.forEach(function(el){ if(el.value === v){ el.checked = true; hit = true; } });
+      if(hit) applied++;
+    } else { els[0].value = v; applied++; }
+  });
+  return applied;
+}
+var loadBtn = document.getElementById("btn-load");
+var fileIn = document.getElementById("file-in");
+loadBtn.addEventListener("click", function(){ fileIn.click(); });
+fileIn.addEventListener("change", function(){
+  var f = fileIn.files && fileIn.files[0];
+  if(!f) return;
+  var restore = "Load a file";
+  var reader = new FileReader();
+  reader.onload = function(){
+    var parsed;
+    try{ parsed = JSON.parse(String(reader.result)); }
+    catch(e){ loadBtn.textContent = "Invalid file"; setTimeout(function(){loadBtn.textContent=restore;},2400); return; }
+    var answers = (parsed && parsed.answers && typeof parsed.answers === "object") ? parsed.answers : parsed;
+    if(!answers || typeof answers !== "object"){
+      loadBtn.textContent = "Nothing in it"; setTimeout(function(){loadBtn.textContent=restore;},2400); return;
+    }
+    var n = applyAnswers(answers);
+    save(); refresh();
+    saveNote.textContent = "Merged " + n + " answers" + (parsed.filledBy ? " from " + parsed.filledBy : "");
+    loadBtn.textContent = n + " merged";
+    setTimeout(function(){ loadBtn.textContent = restore; }, 2600);
+  };
+  reader.readAsText(f);
+  fileIn.value = "";
+});
+
+load();
+refresh();
+})();
+</script>
